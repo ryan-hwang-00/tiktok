@@ -15,9 +15,9 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost> {
   final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/video.wav");
+      VideoPlayerController.asset("assets/videos/IMG_4791.mp4");
 
-  void _onVideoChage() {
+  void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
           _videoPlayerController.value.position) {
@@ -30,7 +30,7 @@ class _VideoPostState extends State<VideoPost> {
     await _videoPlayerController.initialize();
     _videoPlayerController.play();
     setState(() {});
-    _videoPlayerController.addListener(_onVideoChage);
+    _videoPlayerController.addListener(_onVideoChange);
   }
 
   @override
@@ -55,7 +55,7 @@ class _VideoPostState extends State<VideoPost> {
               : Container(
                   color: Colors.black,
                 ),
-        )
+        ),
       ],
     );
   }
