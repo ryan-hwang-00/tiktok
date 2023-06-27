@@ -17,7 +17,10 @@ class _VideoCommentsState extends State<VideoComments> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
+      height: size.height * 0.8,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
@@ -25,91 +28,124 @@ class _VideoCommentsState extends State<VideoComments> {
         ),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.grey.shade50,
+        appBar: AppBar(
           backgroundColor: Colors.grey.shade50,
-          appBar: AppBar(
-            backgroundColor: Colors.grey.shade50,
-            title: const Text("12341"),
-            automaticallyImplyLeading: false,
-            actions: [
-              IconButton(
-                onPressed: _onClosePressed,
-                icon: const FaIcon(FontAwesomeIcons.xmark),
-              ),
-            ],
-          ),
-          body: ListView.separated(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size10,
-              horizontal: Sizes.size16,
+          title: const Text("12341"),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              onPressed: _onClosePressed,
+              icon: const FaIcon(FontAwesomeIcons.xmark),
             ),
-            separatorBuilder: (context, index) => Gaps.v20,
-            itemCount: 10,
-            itemBuilder: (context, index) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  // foregroundImage: NetworkImage(
-                  //     "https://avatars.githubusercontent.com/u/68258601?v=4"),
-                  child: Text("nico"),
-                ),
-                Gaps.h10,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        body: Stack(
+          children: [
+            ListView.separated(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size10,
+                horizontal: Sizes.size16,
+              ),
+              separatorBuilder: (context, index) => Gaps.v20,
+              itemCount: 10,
+              itemBuilder: (context, index) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    // foregroundImage: NetworkImage(
+                    //     "https://avatars.githubusercontent.com/u/68258601?v=4"),
+                    child: Text("nico"),
+                  ),
+                  Gaps.h10,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ingyu hwang',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size14,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                        Gaps.v3,
+                        const Text(
+                            'some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text'),
+                      ],
+                    ),
+                  ),
+                  Gaps.h10,
+                  Column(
                     children: [
+                      FaIcon(
+                        FontAwesomeIcons.heart,
+                        size: Sizes.size20,
+                        color: Colors.grey.shade500,
+                      ),
+                      Gaps.v2,
                       Text(
-                        'ingyu hwang',
+                        '2.2K',
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: Sizes.size14,
                           color: Colors.grey.shade500,
                         ),
                       ),
-                      Gaps.v3,
-                      const Text(
-                          'some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text some kind of text'),
                     ],
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+                bottom: 0,
+                width: size.width,
+                child: BottomAppBar(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.size16,
+                      vertical: Sizes.size10,
+                    ),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          // foregroundImage: NetworkImage(
+                          //     "https://avatars.githubusercontent.com/u/68258601?v=4"),
+                          child: Text("nico"),
+                        ),
+                        Gaps.h10,
+                        Expanded(
+                          child: TextField(
+                            cursorColor: Theme.of(context).primaryColor,
+                            decoration: InputDecoration(
+                              hintText: "Write a comment...",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(Sizes.size12),
+                                  borderSide: BorderSide.none),
+                              filled: true,
+                              fillColor: Colors.grey.shade500,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.size10,
+                                  vertical: Sizes.size12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Gaps.h10,
-                Column(
-                  children: [
-                    FaIcon(
-                      FontAwesomeIcons.heart,
-                      size: Sizes.size20,
-                      color: Colors.grey.shade500,
-                    ),
-                    Gaps.v2,
-                    Text(
-                      '2.2K',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
-            child: Row(
-              children: const [
-                CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  // foregroundImage: NetworkImage(
-                  //     "https://avatars.githubusercontent.com/u/68258601?v=4"),
-                  child: Text("nico"),
-                ),
-              ],
-            ),
-          )),
+                ))
+          ],
+        ),
+      ),
     );
   }
 }
