@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok/constants/gaps.dart';
@@ -21,9 +20,25 @@ class DiscoverScreen extends StatefulWidget {
   State<DiscoverScreen> createState() => _DiscoverScreenState();
 }
 
-class _DiscoverScreenState extends State<DiscoverScreen> {
-  final TextEditingController _textEditingController =
-      TextEditingController(text: 'Initial text');
+class _DiscoverScreenState extends State<DiscoverScreen>
+    with SingleTickerProviderStateMixin {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  bool _isWriting = false;
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: tabs.length,
+      vsync: this,
+    );
+    _tabController.addListener(() {
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
+  }
 
   @override
   void dispose() {
@@ -39,12 +54,66 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 1,
-          title: CupertinoSearchTextField(
-            onChanged: _onSearchChanged,
-            onSubmitted: _onSearchSubmitted,
-            controller: _textEditingController,
+          title: SizedBox(
+            height: Sizes.size44,
+            child: TextField(
+              controller: _textEditingController,
+              onChanged: _onSearchChanged,
+              expands: true,
+              minLines: null,
+              maxLines: null,
+              textInputAction: TextInputAction.newline,
+              cursorColor: Theme.of(context).primaryColor,
+              decoration: InputDecoration(
+                hintText: "Search",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(Sizes.size8),
+                    borderSide: BorderSide.none),
+                filled: true,
+                fillColor: Colors.grey.shade300,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size10,
+                ),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.size10,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.magnifyingGlass,
+                        size: Sizes.size20,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.size10,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: _textRemover,
+                        child: FaIcon(
+                          FontAwesomeIcons.solidCircleXmark,
+                          size: Sizes.size20,
+                          color: _isWriting
+                              ? Colors.grey.shade600
+                              : Colors.grey.withAlpha(0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
           bottom: TabBar(
+            controller: _tabController,
             splashFactory: NoSplash.splashFactory,
             padding: const EdgeInsets.symmetric(horizontal: Sizes.size16),
             isScrollable: true,
@@ -61,6 +130,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           ),
         ),
         body: TabBarView(
+          controller: _tabController,
           children: [
             GridView.builder(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -74,6 +144,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
               itemBuilder: (context, index) => Column(
                 children: [
+                  Gaps.v5,
                   Container(
                     clipBehavior: Clip.hardEdge,
                     decoration: const BoxDecoration(
@@ -91,7 +162,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       ),
                     ),
                   ),
-                  Gaps.v10,
+                  Gaps.v5,
                   const Text(
                     "something long text for tictok uploading tings. something long text for tictok uploading tings.",
                     maxLines: 2,
@@ -101,7 +172,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Gaps.v10,
+                  Gaps.v8,
                   DefaultTextStyle(
                     style: TextStyle(
                       color: Colors.grey.shade600,
@@ -152,10 +223,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   void _onSearchChanged(String value) {
-    print(value);
+    if (value != "") {
+      _isWriting = true;
+    } else {
+      _isWriting = false;
+    }
+    setState(() {});
   }
 
-  void _onSearchSubmitted(String value) {
-    print(value);
+  void _textRemover() {
+    _textEditingController.clear();
   }
 }

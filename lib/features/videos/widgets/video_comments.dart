@@ -45,7 +45,7 @@ class _VideoCommentsState extends State<VideoComments> {
         ),
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey.shade50,
         appBar: AppBar(
           backgroundColor: Colors.grey.shade50,
