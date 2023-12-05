@@ -14,6 +14,8 @@ class _ActivityScreenState extends State<ActivityScreen>
     with SingleTickerProviderStateMixin {
   final List<String> _notifications = List.generate(20, (index) => "${index}h");
 
+  bool _showBarrier = false;
+
   final List<Map<String, dynamic>> _tabs = [
     {
       "title": "All activity",
@@ -38,7 +40,7 @@ class _ActivityScreenState extends State<ActivityScreen>
     {
       "title": "From TikTok",
       "icon": FontAwesomeIcons.tiktok,
-    }
+    },
   ];
 
   late final AnimationController _animationController = AnimationController(
@@ -53,6 +55,11 @@ class _ActivityScreenState extends State<ActivityScreen>
     end: .5,
   ).animate(_animationController);
 
+  late final Animation<Color?> _barrierAinimation = ColorTween(
+    begin: Colors.transparent,
+    end: Colors.black38,
+  ).animate(_animationController);
+
   late final Animation<Offset> _panelAnimation = Tween(
     begin: const Offset(0, -1),
     end: const Offset(0, 0),
@@ -63,7 +70,7 @@ class _ActivityScreenState extends State<ActivityScreen>
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: _onTitleTap,
+          onTap: _toggleAnimations,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -182,6 +189,12 @@ class _ActivityScreenState extends State<ActivityScreen>
                 )
             ],
           ),
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAinimation,
+              dismissible: true,
+              onDismiss: _toggleAnimations,
+            ),
           SlideTransition(
             position: _panelAnimation,
             child: Container(
@@ -213,7 +226,7 @@ class _ActivityScreenState extends State<ActivityScreen>
                           ),
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
@@ -228,11 +241,15 @@ class _ActivityScreenState extends State<ActivityScreen>
     setState(() {});
   }
 
-  void _onTitleTap() {
+  void _toggleAnimations() async {
     if (_animationController.isCompleted) {
-      _animationController.reverse();
+      await _animationController.reverse();
     } else {
       _animationController.forward();
     }
+
+    setState(() {
+      _showBarrier = !_showBarrier;
+    });
   }
 }
